@@ -1,16 +1,16 @@
 #include <algorithm>
 #include <cmath>
-#include <eosiolib/asset.hpp>
-#include <eosiolib/currency.hpp>
-#include <eosiolib/eosio.hpp>
-#include <eosiolib/public_key.hpp>
-#include "includes/eosio.token.hpp"
+#include <enulib/asset.hpp>
+#include <enulib/currency.hpp>
+#include <enulib/enu.hpp>
+#include <enulib/public_key.hpp>
+#include "includes/enu.token.hpp"
 #include "includes/exchange_state.cpp"
 #include "includes/exchange_state.hpp"
 #include "includes/abieos_numeric.hpp"
 
 
-namespace eosio {
+namespace enu {
 
 struct permission_level_weight {
   permission_level permission;
@@ -18,16 +18,16 @@ struct permission_level_weight {
 
   // explicit serialization macro is not necessary, used here only to improve
   // compilation time
-  EOSLIB_SERIALIZE(permission_level_weight, (permission)(weight))
+  ENULIB_SERIALIZE(permission_level_weight, (permission)(weight))
 };
 
 struct key_weight {
-  eosio::public_key key;
+  enu::public_key key;
   weight_type weight;
 
   // explicit serialization macro is not necessary, used here only to improve
   // compilation time
-  EOSLIB_SERIALIZE(key_weight, (key)(weight))
+  ENULIB_SERIALIZE(key_weight, (key)(weight))
 };
 
 struct wait_weight {
@@ -36,7 +36,7 @@ struct wait_weight {
 
   // explicit serialization macro is not necessary, used here only to improve
   // compilation time
-  EOSLIB_SERIALIZE(wait_weight, (wait_sec)(weight))
+  ENULIB_SERIALIZE(wait_weight, (wait_sec)(weight))
 };
 
 struct authority {
@@ -47,11 +47,11 @@ struct authority {
 
   // explicit serialization macro is not necessary, used here only to improve
   // compilation time
-  EOSLIB_SERIALIZE(authority, (threshold)(keys)(accounts)(waits))
+  ENULIB_SERIALIZE(authority, (threshold)(keys)(accounts)(waits))
 };
 
 struct call {
-  struct eosio {
+  struct enu {
     void newaccount(account_name creator, account_name name, authority owner,
                     authority active);
     void delegatebw(account_name from, account_name receiver,
@@ -61,9 +61,9 @@ struct call {
   };
 };
 asset buyrambytes(uint32_t bytes) {
-  rammarket market(N(eosio), N(eosio));
+  rammarket market(N(enu), N(enu));
   auto itr = market.find(S(4, RAMCORE));
-  eosio_assert(itr != market.end(), "RAMCORE market not found");
+  enumivo_assert(itr != market.end(), "RAMCORE market not found");
   auto tmp = *itr;
   return tmp.convert(asset(bytes, S(0, RAM)), CORE_SYMBOL);
 }
