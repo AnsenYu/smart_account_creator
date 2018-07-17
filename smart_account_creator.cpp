@@ -67,12 +67,14 @@ public:
     const auto cpu = asset(1000);
     const auto net = asset(1000);
 
-    const auto fee =
-        asset(std::max((transfer.quantity.amount + 119) / 200, 1000ll));
-    enumivo_assert(cpu + net + amount + fee <= transfer.quantity,
-                 "Not enough money");
+    // omit fee
+    //const auto fee =
+    //    asset(std::max((transfer.quantity.amount + 119) / 200, 1000ll));
+    //enumivo_assert(cpu + net + amount + fee <= transfer.quantity,
+    //             "Not enough money");
 
-    const auto remaining_balance = transfer.quantity - cpu - net - amount - fee;
+    // const auto remaining_balance = transfer.quantity - cpu - net - amount - fee;
+    const auto remaining_balance = transfer.quantity - cpu - net - amount;
 
     // create account
     INLINE_ACTION_SENDER(call::enu, newaccount)
@@ -87,10 +89,10 @@ public:
     INLINE_ACTION_SENDER(call::enu, delegatebw)
     (N(enumivo), {{_self, N(active)}}, {_self, account_to_create, net, cpu, 1});
     // fee
-    INLINE_ACTION_SENDER(enu::token, transfer)
-    (N(enu.token), {{_self, N(active)}},
-     {_self, enumivo::string_to_name("ansenironman"), fee,
-      std::string("Account creation fee")});
+    //INLINE_ACTION_SENDER(enu::token, transfer)
+    //(N(enu.token), {{_self, N(active)}},
+    // {_self, enumivo::string_to_name("ansenironman"), fee,
+    //  std::string("Account creation fee")});
 
     if (remaining_balance.amount > 0) {
       // transfer remaining balance to new account
