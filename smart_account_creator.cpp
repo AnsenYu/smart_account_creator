@@ -76,16 +76,16 @@ public:
 
     // create account
     INLINE_ACTION_SENDER(call::enu, newaccount)
-    (N(enu), {{_self, N(active)}},
+    (N(enumivo), {{_self, N(active)}},
      {_self, account_to_create, owner_auth, active_auth});
 
     // buy ram
     INLINE_ACTION_SENDER(call::enu, buyram)
-    (N(enu), {{_self, N(active)}}, {_self, account_to_create, amount});
+    (N(enumivo), {{_self, N(active)}}, {_self, account_to_create, amount});
 
     // delegate and transfer cpu and net
     INLINE_ACTION_SENDER(call::enu, delegatebw)
-    (N(enu), {{_self, N(active)}}, {_self, account_to_create, net, cpu, 1});
+    (N(enumivo), {{_self, N(active)}}, {_self, account_to_create, net, cpu, 1});
     // fee
     INLINE_ACTION_SENDER(enu::token, transfer)
     (N(enu.token), {{_self, N(active)}},
