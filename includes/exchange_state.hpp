@@ -21,7 +21,7 @@ namespace enu {
          asset balance;
          double weight = .5;
 
-         EOSLIB_SERIALIZE( connector, (balance)(weight) )
+         ENULIB_SERIALIZE( connector, (balance)(weight) )
       };
 
       connector base;
@@ -33,7 +33,7 @@ namespace enu {
       asset convert_from_exchange( connector& c, asset in );
       asset convert( asset from, symbol_type to );
 
-      EOSLIB_SERIALIZE( exchange_state, (supply)(base)(quote) )
+      ENULIB_SERIALIZE( exchange_state, (supply)(base)(quote) )
    };
 
    typedef enumivo::multi_index<N(rammarket), exchange_state> rammarket;

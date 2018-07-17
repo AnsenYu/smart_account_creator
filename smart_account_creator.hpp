@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cmath>
+#include <vector>
 #include <enulib/asset.hpp>
 #include <enulib/currency.hpp>
 #include <enulib/enu.hpp>
@@ -7,13 +8,13 @@
 #include "includes/enu.token.hpp"
 #include "includes/exchange_state.cpp"
 #include "includes/exchange_state.hpp"
-#include "includes/abieos_numeric.hpp"
+#include "includes/abienu_numeric.hpp"
 
 
 namespace enu {
 
 struct permission_level_weight {
-  permission_level permission;
+  enumivo::permission_level permission;
   weight_type weight;
 
   // explicit serialization macro is not necessary, used here only to improve
@@ -22,7 +23,7 @@ struct permission_level_weight {
 };
 
 struct key_weight {
-  enu::public_key key;
+  enumivo::public_key key;
   weight_type weight;
 
   // explicit serialization macro is not necessary, used here only to improve
@@ -41,9 +42,9 @@ struct wait_weight {
 
 struct authority {
   uint32_t threshold;
-  vector<key_weight> keys;
-  vector<permission_level_weight> accounts;
-  vector<wait_weight> waits;
+  std::vector<key_weight> keys;
+  std::vector<permission_level_weight> accounts;
+  std::vector<wait_weight> waits;
 
   // explicit serialization macro is not necessary, used here only to improve
   // compilation time
@@ -61,7 +62,7 @@ struct call {
   };
 };
 asset buyrambytes(uint32_t bytes) {
-  rammarket market(N(enu), N(enu));
+  rammarket market(N(enumivo), N(enumivo));
   auto itr = market.find(S(4, RAMCORE));
   enumivo_assert(itr != market.end(), "RAMCORE market not found");
   auto tmp = *itr;

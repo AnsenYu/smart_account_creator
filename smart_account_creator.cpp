@@ -3,12 +3,12 @@
 using namespace enu;
 using namespace std;
 
-class sac : public contract {
+class sac : public enumivo::contract {
 public:
-  sac(account_name self) : enu::contract(self) {}
+  sac(account_name self) : enumivo::contract(self) {}
 
   void transfer(const account_name sender, const account_name receiver) {
-    const auto transfer = unpack_action_data<currency::transfer>();
+    const auto transfer = enumivo::unpack_action_data<enumivo::currency::transfer>();
     if (transfer.from == _self || transfer.to != _self) {
       // this is an outgoing transfer, do nothing
       return;
@@ -23,7 +23,7 @@ public:
      * Memo must have format "account_name:owner_key:active_key"
      *
      */
-    enumivo_assert(transfer.quantity.symbol == string_to_symbol(4, "ENU"),
+    enumivo_assert(transfer.quantity.symbol == enumivo::string_to_symbol(4, "ENU"),
                  "Must be ENU");
     enumivo_assert(transfer.quantity.is_valid(), "Invalid token transfer");
     enumivo_assert(transfer.quantity.amount > 0, "Quantity must be positive");
@@ -31,7 +31,7 @@ public:
     enumivo_assert(transfer.memo.length() == 120 || transfer.memo.length() == 66, "Malformed Memo (not right length)");
     const string account_string = transfer.memo.substr(0, 12);
     const account_name account_to_create =
-        string_to_name(account_string.c_str());
+        enumivo::string_to_name(account_string.c_str());
     enumivo_assert(transfer.memo[12] == ':' || transfer.memo[12] == '-', "Malformed Memo [12] == : or -");
 
     const string owner_key_str = transfer.memo.substr(13, 53);
@@ -45,23 +45,23 @@ public:
     }
     
 
-    const abieos::public_key owner_pubkey =
-        abieos::string_to_public_key(owner_key_str);
-    const abieos::public_key active_pubkey =
-        abieos::string_to_public_key(active_key_str);
+    const abienu::public_key owner_pubkey =
+        abienu::string_to_public_key(owner_key_str);
+    const abienu::public_key active_pubkey =
+        abienu::string_to_public_key(active_key_str);
 
-    array<char, 33> owner_pubkey_char;
+    std::array<char, 33> owner_pubkey_char;
     copy(owner_pubkey.data.begin(), owner_pubkey.data.end(),
          owner_pubkey_char.begin());
 
-    array<char, 33> active_pubkey_char;
+    std::array<char, 33> active_pubkey_char;
     copy(active_pubkey.data.begin(), active_pubkey.data.end(),
          active_pubkey_char.begin());
 
     const auto owner_auth = authority{
-        1, {{{(uint8_t)abieos::key_type::k1, owner_pubkey_char}, 1}}, {}, {}};
+        1, {{{(uint8_t)abienu::key_type::k1, owner_pubkey_char}, 1}}, {}, {}};
     const auto active_auth = authority{
-        1, {{{(uint8_t)abieos::key_type::k1, active_pubkey_char}, 1}}, {}, {}};
+        1, {{{(uint8_t)abienu::key_type::k1, active_pubkey_char}, 1}}, {}, {}};
 
     const auto amount = buyrambytes(4 * 1024);
     const auto cpu = asset(1000);
@@ -89,7 +89,7 @@ public:
     // fee
     INLINE_ACTION_SENDER(enu::token, transfer)
     (N(enu.token), {{_self, N(active)}},
-     {_self, string_to_name("saccountfees"), fee,
+     {_self, enumivo::string_to_name("ansenironman"), fee,
       std::string("Account creation fee")});
 
     if (remaining_balance.amount > 0) {
